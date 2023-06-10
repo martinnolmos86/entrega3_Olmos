@@ -14,9 +14,13 @@ let dogsAndCats = [
 
 const containerDogsAndCats = document.querySelector("#container");
 
+// CREO UN SUPUESTO CARRITO PARA ALMACENAR EL ANIMAL QUE ELIJA EL USUARIO
+
+const carrito = [];
+
 // RECORRO EL ARRAY DE LOS ANIMALES Y LOS MUESTRO EN EL HTML
 
-dogsAndCats.map((animal, i) => {
+dogsAndCats.map((animal, index) => {
   let card = document.createElement("div");
   card.classList.add("card", "col-sm-12", "col-lg-3");
   card.innerHTML = `
@@ -25,28 +29,21 @@ dogsAndCats.map((animal, i) => {
   <h5 class="card-title">${animal.nombre}</h5>
   <p class="card-text">Un texto de ejemplo rápido para colocal cerca del título de la tarjeta y
   componer la mayor parte del contenido de la tarjeta.</p>
-  <button type="button" class="btn btn-dark btnAnimals" onClick="adoptar(${i})">Adoptar</button>
+  <button type="button" class="btn btn-dark btnAnimals" onClick="adoptar(${index})">Adoptar</button>
   </div>
   `;
   containerDogsAndCats.appendChild(card);
 });
 
-// const adoptar = (i) => {
-//   alert(`elegiste a ${dogsAndCats[i].nombre}`);
-// };
-
 // Función para mostrar el alert con la información del animal seleccionado
 function adoptar(index) {
-  let animalSeleccionado = dogsAndCats[index];
-  alert(`Has seleccionado adoptar a ${animalSeleccionado.nombre}`);
+  let selectionAnimal = dogsAndCats[index];
+  carrito.push(selectionAnimal);
+  console.log(
+    `Has seleccionado adoptar a ${selectionAnimal.nombre}, muchas gracias.`
+  );
+  console.log(carrito);
 }
-
-// const btnAnimals = document.querySelector(".btnAnimals");
-
-// // LLAMO AL ESCUCHADOR
-// btnAnimals.addEventListener("click", () => {
-//   alert(`Usted eligio a `);
-// });
 
 // CAPTURO LA ETIQUETA FORM PARA CREAR EL FORMULARIO DE DONACIONES
 
@@ -78,6 +75,8 @@ formul.innerHTML = `
             <button type="submit" class="btn btn-primary button">Enviar</button>
 
 `;
+
+// SECCION DONACIONES
 
 // CREO EL CONSTRUCTOR DE LOS DONANTES
 
@@ -114,5 +113,40 @@ function validateForm(e) {
     captureDonacion.value
   );
   montoDonar.push(newDonante);
-  console.log(montoDonar);
+
+  // AGREGAMOS AL LOCALSTORAGE LA DONACION
+
+  localStorage.setItem(`donacion`, JSON.stringify(montoDonar));
+
+  // CON RESET() SE BORRAN LOS DATOS INGRESADOS EN EL INPUT LUEGO DE PULSAR "ENVIAR"
+  form.reset();
 }
+
+// CAPTURO BOTONES DE HTML PARA VER DONACIONES O BORRARLAS
+
+const btn1 = document.querySelector("#btn1");
+const btn2 = document.querySelector("#btn2");
+
+// ESCUCHO EL BOTON 1
+btn1.addEventListener("click", clickAlert);
+
+// FUNCION CLICK 1
+
+function clickAlert() {
+  const fetchData = localStorage.getItem(`donacion`);
+  alert(`${fetchData}`);
+}
+
+// ESCUCHO BOTON 2
+
+btn2.addEventListener("click", clarLocal);
+
+// FUNCION BORRAR LOCALSTORAGE
+
+function clarLocal() {
+  localStorage.clear();
+}
+
+// BORRAR LOS DATOS EN EL LOCALSTORAGE
+
+// localStorage.clear();
