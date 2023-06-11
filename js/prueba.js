@@ -112,6 +112,9 @@ function validateForm(e) {
     captureEmail.value,
     captureDonacion.value
   );
+
+  // AGREGO EL NUEVO DONANTE AL ARRAY
+
   montoDonar.push(newDonante);
 
   // AGREGAMOS AL LOCALSTORAGE LA DONACION
@@ -127,26 +130,36 @@ function validateForm(e) {
 const btn1 = document.querySelector("#btn1");
 const btn2 = document.querySelector("#btn2");
 
-// ESCUCHO EL BOTON 1
-btn1.addEventListener("click", clickAlert);
+// CAPTURO EL DIV DEL HTML
 
-// FUNCION CLICK 1
+const containerDonation = document.getElementById("containerDonate");
 
-function clickAlert() {
-  const fetchData = localStorage.getItem(`donacion`);
-  alert(`${fetchData}`);
+// ESCUCHO EL BOTON 1 PARA VER LAS DONACIONES
+
+btn1.addEventListener("click", () => {
+  seeDonation();
+});
+
+// FUNCION PARA MOSTRAR LAS DONACIONES
+
+function seeDonation() {
+  containerDonation.innerHTML = ``;
+  montoDonar.forEach((donate) => {
+    const divDonate = document.createElement("div");
+    divDonate.innerHTML = `  
+    <p>Nombre del Donante: ${donate.nombre} ${donate.apellido}</p>
+    <p>Dono: ${donate.donation}</p>
+    `;
+    containerDonation.appendChild(divDonate);
+  });
 }
 
 // ESCUCHO BOTON 2
 
-btn2.addEventListener("click", clarLocal);
+btn2.addEventListener("click", clearLocal);
 
 // FUNCION BORRAR LOCALSTORAGE
 
-function clarLocal() {
+function clearLocal() {
   localStorage.clear();
 }
-
-// BORRAR LOS DATOS EN EL LOCALSTORAGE
-
-// localStorage.clear();
