@@ -39,10 +39,14 @@ dogsAndCats.map((animal, index) => {
 function adoptar(index) {
   let selectionAnimal = dogsAndCats[index];
   carrito.push(selectionAnimal);
-  console.log(
-    `Has seleccionado adoptar a ${selectionAnimal.nombre}, muchas gracias.`
-  );
-  console.log(carrito);
+  Swal.fire({
+    title: "¡Adopción exitosa!",
+    text: `Gracias por adoptar a ${selectionAnimal.nombre}! `,
+    imageUrl: `${selectionAnimal.imagen}`,
+    imageWidth: 400,
+    imageHeight: 200,
+    imageAlt: "Custom image",
+  });
 }
 
 // CAPTURO LA ETIQUETA FORM PARA CREAR EL FORMULARIO DE DONACIONES
@@ -106,6 +110,17 @@ form.addEventListener("submit", validateForm);
 function validateForm(e) {
   e.preventDefault();
 
+  // VERIFICAR SI ESTAN LOS CAMPOS COMPLETOS AL ENVIAR
+  if (
+    captureName.value === "" ||
+    captureApellido.value === "" ||
+    captureEmail.value === "" ||
+    captureDonacion.value === ""
+  ) {
+    Swal.fire("Por favor, completa todos los campos.");
+    return;
+  }
+
   const newDonante = new Donante(
     captureName.value,
     captureApellido.value,
@@ -121,8 +136,17 @@ function validateForm(e) {
 
   localStorage.setItem(`donacion`, JSON.stringify(montoDonar));
 
+  Swal.fire("Gracias por tu generosidad.");
+
   // CON RESET() SE BORRAN LOS DATOS INGRESADOS EN EL INPUT LUEGO DE PULSAR "ENVIAR"
   form.reset();
+}
+
+// CUANDO ACTUALIZO LA PAGINA Y TENGO COSAS EN EL LOCALSTORAGE LAS AGREGO AL CARRITO
+
+if (localStorage.getItem("donacion")) {
+  let infoLocalS = JSON.parse(localStorage.getItem("donacion"));
+  montoDonar.push(...infoLocalS);
 }
 
 // CAPTURO BOTONES DE HTML PARA VER DONACIONES O BORRARLAS
@@ -144,14 +168,32 @@ btn1.addEventListener("click", () => {
 
 function seeDonation() {
   containerDonation.innerHTML = ``;
-  montoDonar.forEach((donate) => {
+  montoDonar.forEach((donate, index) => {
     const divDonate = document.createElement("div");
     divDonate.innerHTML = `  
     <p>Nombre del Donante: ${donate.nombre} ${donate.apellido}</p>
     <p>Dono: ${donate.donation}</p>
+    <button type="button" class="btn btn-primary btn-sm btn-delete" data-index="${index}">Eliminar</button>
+
     `;
     containerDonation.appendChild(divDonate);
   });
+
+  // Agregar el event listener a los botones de eliminar
+  const deleteButtons = document.getElementsByClassName("btn-delete");
+  for (let i = 0; i < deleteButtons.length; i++) {
+    deleteButtons[i].addEventListener("click", () => deleteDonation(i));
+  }
+}
+// FUNCION PARA ELIMINAR UNA DONACION
+function deleteDonation(index) {
+  montoDonar.splice(index, 1); // Eliminar el elemento del array
+
+  // Actualizar el localStorage con los nuevos datos
+  localStorage.setItem("donacion", JSON.stringify(montoDonar));
+
+  // Volver a mostrar las donaciones actualizadas
+  seeDonation();
 }
 
 // ESCUCHO BOTON 2
