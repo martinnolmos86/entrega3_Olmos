@@ -1,3 +1,5 @@
+// === PRIMERA FUNCIONALIDAD ===
+
 // creamos los objetos
 let dogsAndCats = [
   { nombre: "Nala", caracteristicas: "", imagen: "./assets/gato1.jpg" },
@@ -35,7 +37,8 @@ dogsAndCats.map((animal, index) => {
   containerDogsAndCats.appendChild(card);
 });
 
-// Función para mostrar el alert con la información del animal seleccionado
+// FUNCION PARA MOSTRAR EL ANIMAL QUE SE SELECCIONO
+
 function adoptar(index) {
   let selectionAnimal = dogsAndCats[index];
   carrito.push(selectionAnimal);
@@ -48,6 +51,8 @@ function adoptar(index) {
     imageAlt: "Custom image",
   });
 }
+
+// === SEGUNDA FUNCIONALIDAD ===
 
 // CAPTURO LA ETIQUETA FORM PARA CREAR EL FORMULARIO DE DONACIONES
 
@@ -111,6 +116,7 @@ function validateForm(e) {
   e.preventDefault();
 
   // VERIFICAR SI ESTAN LOS CAMPOS COMPLETOS AL ENVIAR
+
   if (
     captureName.value === "" ||
     captureApellido.value === "" ||
@@ -138,7 +144,8 @@ function validateForm(e) {
 
   Swal.fire("Gracias por tu generosidad.");
 
-  // CON RESET() SE BORRAN LOS DATOS INGRESADOS EN EL INPUT LUEGO DE PULSAR "ENVIAR"
+  // CON RESET() BORRAMOS LOS DATOS INGRESADOS EN EL INPUT LUEGO DE PULSAR "ENVIAR"
+
   form.reset();
 }
 
@@ -179,20 +186,24 @@ function seeDonation() {
     containerDonation.appendChild(divDonate);
   });
 
-  // Agregar el event listener a los botones de eliminar
+  // AGREGAR EL EVENT LISTENER A LOS BOTONES DE ELIMINAR
+
   const deleteButtons = document.getElementsByClassName("btn-delete");
   for (let i = 0; i < deleteButtons.length; i++) {
     deleteButtons[i].addEventListener("click", () => deleteDonation(i));
   }
 }
 // FUNCION PARA ELIMINAR UNA DONACION
-function deleteDonation(index) {
-  montoDonar.splice(index, 1); // Eliminar el elemento del array
 
-  // Actualizar el localStorage con los nuevos datos
+function deleteDonation(index) {
+  montoDonar.splice(index, 1); // ELIMINAR EL ELEMENTO DEL ARRAY
+
+  // ACTUALIZAR EL LOCALSTORAGE CON LOS NUEVOS DATOS
+
   localStorage.setItem("donacion", JSON.stringify(montoDonar));
 
-  // Volver a mostrar las donaciones actualizadas
+  // VOLVER A MOSTRAR LAS DONACIONES ACTUALIZADAS
+
   seeDonation();
 }
 
